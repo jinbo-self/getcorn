@@ -47,16 +47,17 @@ def grab_screen(x, x_w, y, y_h):
 
 def findImageLoc(templateImage):
     # 加载训练图A.JPG和待检测图C.JPG
-    template = cv2.imread(templateImage)  #模版图像
+
+    template = cv2.imread('image/'+templateImage)  #模版图像
     inputImage = grab_screen(
         x=0,
         x_w=1920,
         y=0,
         y_h=1080)
 
-    # inputImage  = cv2.cvtColor(inputImageFile, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
+    # inputImage  = cv2.cvtColor(inputImage, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
     # template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
-    # cv2.imshow('screen', inputImage)
+    # cv2.imshow('screen', template)
     # cv2.waitKey(0)
 
     # 加载B.JPG并从A.JPG中截取
@@ -68,7 +69,7 @@ def findImageLoc(templateImage):
         print(pt)
         x, y = pt[0], pt[1]
         w, h = template.shape[1], template.shape[0]  # 边界矩形的宽度和高度等于模板的宽度和高度
-        cv2.rectangle(inputImage, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 在图像上绘制边界矩形
+        #cv2.rectangle(inputImage, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 在图像上绘制边界矩形
         return x + w / 2, y + h / 2,True
 
     return 0,0,False
