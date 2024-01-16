@@ -1,0 +1,10 @@
+首页=false
+while true:
+    如果(events识别为真&&是首页)：
+        点击图片进入任务栏
+        如果识别（global envents为真）：
+            进入任务栏成功
+            在首页 = false
+            在任务栏 = 真
+    如果（在任务栏）：
+        点击stories
