@@ -1,28 +1,40 @@
+import time
+
 import cv2
-from paddleocr import PaddleOCR,draw_ocr
-from function import grab_screen
+
+from function import clickImage, findImageLoc, grab_screen, FindStr
+
+# 定位游戏方框/大小
+cube_left_x, cube_left_y, cube_left_flag = findImageLoc('cube_left.png')
+cube_right_x, cube_right_y, cube_right_flag = findImageLoc('cube_right.png')
+
+# 顶线平行
+if cube_left_y < cube_right_y:
+    cube_right_y = cube_left_y
+else:
+    cube_left_y = cube_right_y
+cube_w = cube_right_x - cube_left_x
+cube_h = cube_w * 712 / 1265
+print(cube_left_x, cube_left_y,1)
+print(cube_right_x, cube_right_y,2)
+print(cube_w, cube_h,3)
 
 
-#输出图片文字
-def FindStr(imgPath):
-    ocr = PaddleOCR()
-    img = imgPath#cv2.imread(imgPath)
-
-    result = ocr.ocr(img, cls=False)
-    print(result,1)
-    for line in result:
-        #print(line,2)
-        for line_1 in line:
-            print(line_1,3)
-            if line_1[-1][0] == "EVENTES":
-                return line_1[-1][0]
+def res(x, y):
+    x = (x - cube_left_x) / cube_w
+    y = (y - cube_left_y) / cube_h
+    return x, y
 
 
+x, y = res(1554, 582)
+print("比例：", x, y)
 
-inputImage = grab_screen(
-        x=0,
-        x_w=1920,
-        y=0,
-        y_h=1080)
-if FindStr(inputImage)=="EVENTES":
-    print("OK!")
+
+def trans(x, y):
+    x = x * cube_w + cube_left_x
+    y = y * cube_h + cube_left_y
+    return x, y
+
+
+x, y = trans(x, y)
+print("还原：", x, y)

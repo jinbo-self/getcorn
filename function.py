@@ -58,7 +58,7 @@ def findImageLoc(templateImage):
         y_h=1080)
 
     # inputImage  = cv2.cvtColor(inputImage, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
-    template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
+    # template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
     # cv2.imshow('screen', template)
     # cv2.waitKey(0)
 
@@ -150,13 +150,16 @@ def clickImage(x, y):
     user32.SendInput(2, ctypes.pointer(inputs), ctypes.sizeof(INPUT))
 
 
-def FindStr(imgPath):
-    imgPath = cv2.imread('image/' + imgPath)  # 模版图像
+def FindStr(imgPath, path=True):
+    if path:
+        imgPath = cv2.imread('image/' + imgPath)  # 模版图像
+        img = cv2.imread(imgPath)
+    else:
+        img = imgPath
     ocr = PaddleOCR()
-    img = cv2.imread(imgPath)
 
     result = ocr.ocr(img, cls=False)
-
+    print(result)
     for line in result:
         for i in line:
             return i[-1][0]
