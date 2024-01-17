@@ -6,9 +6,10 @@ import numpy as np
 import win32con
 import win32gui
 import win32ui
+from paddleocr import PaddleOCR
 
 
-#获取全屏
+# 获取全屏
 def grab_screen(x, x_w, y, y_h):
     # 获取桌面
     hwin = win32gui.GetDesktopWindow()
@@ -45,10 +46,11 @@ def grab_screen(x, x_w, y, y_h):
 
     return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
+
 def findImageLoc(templateImage):
     # 加载训练图A.JPG和待检测图C.JPG
 
-    template = cv2.imread('image/'+templateImage)  #模版图像
+    template = cv2.imread('image/' + templateImage)  # 模版图像
     inputImage = grab_screen(
         x=0,
         x_w=1920,
@@ -56,7 +58,7 @@ def findImageLoc(templateImage):
         y_h=1080)
 
     # inputImage  = cv2.cvtColor(inputImage, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
-    # template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
+    template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)  # 转换为灰度图像
     # cv2.imshow('screen', template)
     # cv2.waitKey(0)
 
@@ -69,11 +71,13 @@ def findImageLoc(templateImage):
         print(pt)
         x, y = pt[0], pt[1]
         w, h = template.shape[1], template.shape[0]  # 边界矩形的宽度和高度等于模板的宽度和高度
-        #cv2.rectangle(inputImage, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 在图像上绘制边界矩形
-        return x + w / 2, y + h / 2,True
+        # cv2.rectangle(inputImage, (x, y), (x + w, y + h), (0, 255, 0), 2)  # 在图像上绘制边界矩形
+        return x + w / 2, y + h / 2, True
 
-    return 0,0,False
+    return 0, 0, False
     # 模拟鼠标点击
+
+
 # 定义MOUSEINPUT结构体
 class MOUSEINPUT(ctypes.Structure):
     _fields_ = [("dx", ctypes.c_long),
@@ -83,12 +87,14 @@ class MOUSEINPUT(ctypes.Structure):
                 ("time", ctypes.c_ulong),
                 ("dwExtraInfo", ctypes.POINTER(ctypes.c_ulong))]
 
+
 # 定义INPUT结构体
 class INPUT(ctypes.Structure):
     _fields_ = [("type", ctypes.c_ulong),
                 ("mi", MOUSEINPUT)]
 
-def clickImage(x,y):
+
+def clickImage(x, y):
     # 定义常量
     INPUT_MOUSE = 0
     MOUSEEVENTF_LEFTDOWN = 0x02
@@ -97,7 +103,6 @@ def clickImage(x,y):
 
     # 获取屏幕分辨率
     user32 = ctypes.windll.user32
-
 
     screen_width = user32.GetSystemMetrics(0)
     screen_height = user32.GetSystemMetrics(1)
@@ -111,7 +116,7 @@ def clickImage(x,y):
     x = int(x * 65536 / screen_width)
     y = int(y * 65536 / screen_height)
 
-    print(x,y,screen_width,screen_height)
+    print(x, y, screen_width, screen_height)
 
     mouse_input_down = MOUSEINPUT()
     mouse_input_down.dx = x
@@ -145,5 +150,15 @@ def clickImage(x,y):
     user32.SendInput(2, ctypes.pointer(inputs), ctypes.sizeof(INPUT))
 
 
+def FindStr(imgPath):
+    imgPath = cv2.imread('image/' + imgPath)  # 模版图像
+    ocr = PaddleOCR()
+    img = cv2.imread(imgPath)
 
+    result = ocr.ocr(img, cls=False)
 
+    for line in result:
+        for i in line:
+            return i[-1][0]
+
+    return ""

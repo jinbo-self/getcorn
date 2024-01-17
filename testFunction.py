@@ -1,27 +1,28 @@
 import cv2
 from paddleocr import PaddleOCR,draw_ocr
-import requests
-from bs4 import BeautifulSoup
+from function import grab_screen
+
+
 #输出图片文字
 def FindStr(imgPath):
     ocr = PaddleOCR()
-    img = cv2.imread("CONNECT.png")
+    img = imgPath#cv2.imread(imgPath)
 
     result = ocr.ocr(img, cls=False)
-
+    print(result,1)
     for line in result:
-        for i in line:
-            return i[-1][0]
+        #print(line,2)
+        for line_1 in line:
+            print(line_1,3)
+            if line_1[-1][0] == "EVENTES":
+                return line_1[-1][0]
 
-url = "https://game.cryptounicorns.fun"
-print(url)
-response = requests.get(url)
-if response.status_code==200:
-    pass
-else:
-    print("请求错误")
 
-html = response.content
-soup = BeautifulSoup(html,'html.parser')
-element = soup.find('div',{'class':'sc-imWYAI iZlvRU'})
-print(element)
+
+inputImage = grab_screen(
+        x=0,
+        x_w=1920,
+        y=0,
+        y_h=1080)
+if FindStr(inputImage)=="EVENTES":
+    print("OK!")
