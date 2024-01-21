@@ -64,7 +64,7 @@ def findImageLoc(templateImage):
 
     # 加载B.JPG并从A.JPG中截取
     res = cv2.matchTemplate(inputImage, template, cv2.TM_CCOEFF_NORMED)
-    threshold = 0.8
+    threshold = 0.65
     loc = np.where(res >= threshold)  # 找到匹配的位置
 
     for pt in zip(*loc[::-1]):

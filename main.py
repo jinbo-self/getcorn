@@ -46,17 +46,17 @@ while True:
         #clickImage(events_x, events_y)
         clickImage(int((EVENTS_x + EVENTS_x_w) / 2), int((EVENTS_y + EVENTS_y_h) / 2))
         time.sleep(1)
-        image = grab_screen(STORIES_x, STORIES_x_w, STORIES_y, STORIES_y_h)
+
         # cv2.imshow('screen', image)
         # cv2.waitKey(0)
-        if FindStr(grab_screen(STORIES_x, STORIES_x_w, STORIES_y, STORIES_y_h), path=False) == "STORIES":
-            is_events_page = True
-            is_first_page = False
-            clickImage(int((STORIES_x + STORIES_x_w)/2),int((STORIES_y+STORIES_y_h)/2))
-            time.sleep(1)
-            clickImage(the_first_stories_x,the_first_stories_y)
-            time.sleep(1)
-            clickImage(add_unicorn_x, add_unicorn_y)
-            time.sleep(1)
+    if FindStr(grab_screen(STORIES_x, STORIES_x_w, STORIES_y, STORIES_y_h), path=False) == "STORIES":
+        is_events_page = True
+        is_first_page = False
+        clickImage(int((STORIES_x + STORIES_x_w)/2),int((STORIES_y+STORIES_y_h)/2))
+        time.sleep(1)
+        clickImage(the_first_stories_x,the_first_stories_y)
+        time.sleep(1)
+        clickImage(add_unicorn_x, add_unicorn_y)
+        time.sleep(1)
 
 
