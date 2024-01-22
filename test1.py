@@ -1,3 +1,19 @@
-import torch
-import torchvision
-print(torch.cuda.is_available())
+from PIL import Image
+
+from ultralytics import YOLO
+
+# 加载模型
+if __name__ == '__main__':
+    #model = YOLO("yolov8n.yaml")  # 从头开始构建新模型
+    model = YOLO("yolov8n.pt")  # 加载预训练模型（建议用于训练）
+
+    # 使用模型
+    #model.train(data="coco128.yaml", epochs=3)  # 训练模型
+    #metrics = model.val()  # 在验证集上评估模型性能
+    results = model("https://ultralytics.com/images/bus.jpg")  # 对图像进行预测
+    for r in results:
+        print(r)
+        im_array = r.plot()  # plot a BGR numpy array of predictions
+        im = Image.fromarray(im_array[..., ::-1])  # RGB PIL image
+        im.show()  # show image
+        im.save('results.jpg')  # save image
